@@ -1,12 +1,13 @@
 package ohm.softa.a04.tests;
 
-import ohm.softa.a04.SimpleFilter;
-import ohm.softa.a04.SimpleList;
-import ohm.softa.a04.SimpleListImpl;
+import ohm.softa.a04.*;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+
+import java.util.Iterator;
+import java.util.function.Function;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -48,7 +49,7 @@ public class SimpleListTests {
 	}
 
 	@Test
-	void testFilterAnonymousClass(){
+	void testFilterAnonymousClass() throws InstantiationException, IllegalAccessException {
 		logger.info("Testing the filter possibilities by filtering for all elements greater 2");
 		SimpleList result = testList.filter(new SimpleFilter() {
 			@Override
@@ -65,7 +66,7 @@ public class SimpleListTests {
 	}
 
 	@Test
-	void testFilterLambda(){
+	void testFilterLambda() throws InstantiationException, IllegalAccessException {
 		logger.info("Testing the filter possibilities by filtering for all elements which are dividable by 2");
 		SimpleList result = testList.filter(o -> ((int) o) % 2 == 0);
 		for(Object o : result){
@@ -73,4 +74,22 @@ public class SimpleListTests {
 			assertTrue(i % 2 == 0);
 		}
 	}
+
+	@Test
+	void testAddDefault() throws Exception{
+		logger.info("Testing if you can add an item with default value");
+		SimpleListImpl<Person> result = new SimpleListImpl<Person>();
+		result.addDefault(Person.class);
+		assertEquals(1, result.size());
+	}
+
+	/*@Test
+	void testMapFunction() throws Exception{
+		SimpleListImpl<Person> p = new SimpleListImpl<>();
+		p.add(new Person("Petar", 20));
+		p.add(new Person("Ivan", 24));
+		p.add(new Person("Gavril", 28));
+
+		SimpleListImpl<Student> s = p.map( (person) -> new Student(person.getName(), person.getAge()));
+	}*/
 }
