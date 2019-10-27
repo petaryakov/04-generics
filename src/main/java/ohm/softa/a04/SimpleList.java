@@ -21,12 +21,21 @@ public interface SimpleList<T> extends Iterable<T> {
 	 * @throws IllegalAccessException
 	 * @throws InstantiationException
 	 */
-	default void addDefault(Class<T> clazz) throws IllegalAccessException, InstantiationException, NoSuchMethodException, InvocationTargetException {
+	/*default void addDefault(Class<T> clazz) throws IllegalAccessException, InstantiationException, NoSuchMethodException, InvocationTargetException {
 		//T def = clazz.newInstance();
 		add((T)clazz.newInstance());
 		this.add((T) clazz.getDeclaredConstructor().newInstance()); // get declared constructor moga da si
 																	// sloja aargumenti v get declared constr
-	}
+	}*/
+
+    @SuppressWarnings("unchecked")
+    default void addDefault(Class<T> clazz) {
+        try {
+            this.add(clazz.newInstance());
+        } catch (InstantiationException | IllegalAccessException e) {
+            e.printStackTrace();
+        }
+    }
 
 	/**
 	 * Generate a new list using the given filter instance.

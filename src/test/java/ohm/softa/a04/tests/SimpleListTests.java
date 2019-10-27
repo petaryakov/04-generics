@@ -78,10 +78,10 @@ public class SimpleListTests {
 	@Test
 	void testAddDefault() throws Exception{
 		logger.info("Testing if you can add an item with default value");
-		SimpleListImpl<Person> result = new SimpleListImpl<Person>();
-        logger.info("Size is: " + result.size());
-		result.addDefault(Person.class);
+		SimpleList<Person> result = new SimpleListImpl<>();
 
+		result.addDefault(Person.class);
+        logger.info("Size is: " + result.size());
 		assertEquals(1, result.size());
 	}
 

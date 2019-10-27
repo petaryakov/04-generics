@@ -3,7 +3,7 @@ package ohm.softa.a04;
 import javax.lang.model.element.Element;
 import java.util.Iterator;
 import java.util.logging.ConsoleHandler;
-import ohm.softa.a04.Person;
+
 
 /**
  * @author Peter Kurfer
@@ -25,17 +25,18 @@ public class SimpleListImpl<T> implements SimpleList<T> {
 	public void add(T item){
 		/* special case empty list */
 		if(head == null){
-			head = new ListElement(item);
+			head = new ListElement<>(item);
 		}else {
 			/* any other list length */
-			ListElement current = head;
+			ListElement<T> current = head;
 			while (current.getNext() != null){
 				current = current.getNext();
 			}
-			current.setNext(new ListElement(item));
+			current.setNext(new ListElement<>(item));
 		}
 		size++;
 	}
+
 
 	/**
 	 * @return size of the list
@@ -131,16 +132,9 @@ public class SimpleListImpl<T> implements SimpleList<T> {
 	}
 
 	public static void main(String[] args) {
-		SimpleListImpl<Person> testList = new SimpleListImpl<>();
-
-		try{
-			testList.addDefault(Person.class); // Warum geht es nicht mit Integer, aber es geht mit Person?
-		}
-		catch (Exception e){
-			System.out.println("Exception message: " + e.getMessage());
-		}
-
-		System.out.println("Size is " + testList.size());
-
+		SimpleList<Integer> list = new SimpleListImpl<>();
+		list.add(4);
+		list.addDefault(Integer.class);
+		System.out.println("List size is: " + list.size());
 	}
 }
