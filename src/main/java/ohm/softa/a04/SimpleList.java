@@ -1,5 +1,7 @@
 package ohm.softa.a04;
 
+import java.lang.reflect.InvocationTargetException;
+import java.util.Iterator;
 import java.util.function.Function;
 
 public interface SimpleList<T> extends Iterable<T> {
@@ -19,9 +21,11 @@ public interface SimpleList<T> extends Iterable<T> {
 	 * @throws IllegalAccessException
 	 * @throws InstantiationException
 	 */
-	default void addDefault(Class<T> clazz)throws IllegalAccessException, InstantiationException{
+	default void addDefault(Class<T> clazz) throws IllegalAccessException, InstantiationException, NoSuchMethodException, InvocationTargetException {
 		//T def = clazz.newInstance();
-		add(clazz.newInstance());
+		add((T)clazz.newInstance());
+		this.add((T) clazz.getDeclaredConstructor().newInstance()); // get declared constructor moga da si
+																	// sloja aargumenti v get declared constr
 	}
 
 	/**
@@ -29,7 +33,10 @@ public interface SimpleList<T> extends Iterable<T> {
 	 * @return a new, filtered list
 	 */
 	default SimpleList<T> filter(SimpleFilter<T> filter) throws IllegalAccessException, InstantiationException {
+
+		//SimpleList<T> result = this.getClass().getDeclaredConstructor().newInstance();
 		SimpleList<T> result;
+
 		try {
 			result = (SimpleList<T>) getClass().newInstance();
 		} catch (InstantiationException | IllegalAccessException e) {
@@ -40,16 +47,16 @@ public interface SimpleList<T> extends Iterable<T> {
 	}
 
 	default<R> SimpleList<R> map(Function<T, R> transform){
-		SimpleList<R> result;
-		try{
-			result = (SimpleList<R>) getClass().newInstance();
+		SimpleList<R> result = new SimpleListImpl<R>();
+		//try{
+			//result = (SimpleList<R>) getClass().newInstance();
 			for(T t : this){
-				result.add((R)transform.apply(t));			// apply is important
+				result.add(transform.apply(t));			// apply is important
 			}
-		}catch (InstantiationException | IllegalAccessException e) {
+		/*}catch (InstantiationException | IllegalAccessException e) {
 			result = new SimpleListImpl<>();
 			System.out.println("in map, result = new SimpleListImpl<>()");
-		}
+		}*/
 		return result;
 	}
 }

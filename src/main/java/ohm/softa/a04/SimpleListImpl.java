@@ -3,6 +3,7 @@ package ohm.softa.a04;
 import javax.lang.model.element.Element;
 import java.util.Iterator;
 import java.util.logging.ConsoleHandler;
+import ohm.softa.a04.Person;
 
 /**
  * @author Peter Kurfer
@@ -48,9 +49,9 @@ public class SimpleListImpl<T> implements SimpleList<T> {
 	 * @param filter SimpleFilter instance
 	 * @return new SimpleList instance
 	 *//*
-	public SimpleList filter(SimpleFilter filter){
-		SimpleList result = new SimpleListImpl();
-		for(Object o : this){
+	public SimpleList<T> filter(SimpleFilter<T> filter){
+		SimpleList<T> result = new SimpleListImpl<>();
+		for(T o : this){
 			if(filter.include(o)){
 				result.add(o);
 			}
@@ -62,17 +63,17 @@ public class SimpleListImpl<T> implements SimpleList<T> {
 	 * @inheritDoc
 	 */
 	@Override
-	public Iterator iterator() {
+	public Iterator<T> iterator() {
 		return new SimpleIterator();
-	}
+	}  //
 
 	/**
 	 * Helper class which implements the Iterator interface
 	 * Has to be non static because otherwise it could not access the head of the list
 	 */
-	private class SimpleIterator<T> implements Iterator<T> {
+	private class SimpleIterator implements Iterator<T> {  /// simple iterator has now T vars aber inhreits from iterator <T>
 
-		private ListElement current = head;
+		private ListElement<T> current = head;
 
 		/**
 		 * @inheritDoc
@@ -87,7 +88,7 @@ public class SimpleListImpl<T> implements SimpleList<T> {
 		 */
 		@Override
 		public T next() {
-			T tmp = (T)current.getItem();  // warum brauchen wir Cast, wenn getItem() T returns
+			T tmp = current.getItem();  // warum brauchen wir Cast, wenn getItem() T returns
 			current = current.getNext();
 			return tmp;
 		}
@@ -124,16 +125,16 @@ public class SimpleListImpl<T> implements SimpleList<T> {
 		 * Sets the successor of the ListElement
 		 * @param next ListElement
 		 */
-		public void setNext(ListElement next) {
+		public void setNext(ListElement<T> next) {  //////////////
 			this.next = next;
 		}
 	}
 
 	public static void main(String[] args) {
-		SimpleListImpl<Integer> testList = new SimpleListImpl<>();
+		SimpleListImpl<Person> testList = new SimpleListImpl<>();
 
 		try{
-			testList.addDefault(Integer.class); // Warum geht es nicht mit Integer, aber es geht mit Person?
+			testList.addDefault(Person.class); // Warum geht es nicht mit Integer, aber es geht mit Person?
 		}
 		catch (Exception e){
 			System.out.println("Exception message: " + e.getMessage());

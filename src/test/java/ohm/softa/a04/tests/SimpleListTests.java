@@ -19,11 +19,11 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 public class SimpleListTests {
 
 	private final Logger logger = LogManager.getLogger();
-	private SimpleList testList;
+	private SimpleList<Integer> testList;
 
 	@BeforeEach
 	void setup(){
-		testList = new SimpleListImpl();
+		testList = new SimpleListImpl<>();
 
 		testList.add(1);
 		testList.add(2);
@@ -36,7 +36,7 @@ public class SimpleListTests {
 	void testAddElements(){
 		logger.info("Testing if adding and iterating elements is implemented correctly");
 		int counter = 0;
-		for(Object o : testList){
+		for(Integer o : testList){ //es geht auch mit object
 			counter++;
 		}
 		assertEquals(5, counter);
@@ -51,9 +51,9 @@ public class SimpleListTests {
 	@Test
 	void testFilterAnonymousClass() throws InstantiationException, IllegalAccessException {
 		logger.info("Testing the filter possibilities by filtering for all elements greater 2");
-		SimpleList result = testList.filter(new SimpleFilter() {
+		SimpleList<Integer> result = testList.filter(new SimpleFilter<Integer>() {
 			@Override
-			public boolean include(Object item) {
+			public boolean include(Integer item) {
 				int current = (int)item;
 				return current > 2;
 			}
@@ -79,7 +79,9 @@ public class SimpleListTests {
 	void testAddDefault() throws Exception{
 		logger.info("Testing if you can add an item with default value");
 		SimpleListImpl<Person> result = new SimpleListImpl<Person>();
+        logger.info("Size is: " + result.size());
 		result.addDefault(Person.class);
+
 		assertEquals(1, result.size());
 	}
 
